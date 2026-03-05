@@ -4,6 +4,9 @@ const dotenv = require("dotenv");
 const loginfile = require("./login.js");
 const apifile = require("./api.js");
 
+const CustomError = require("./utils/CustomError");
+const errorHandler = require("./middleware/errorHandler");
+
 dotenv.config();
 
 const app = express();
@@ -38,6 +41,15 @@ app.get(/^\/update(?:\.html)?$/, (req, res) => {
 app.get(/^\/delete(?:\.html)?$/, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "delete.html"));
 });
+
+//404 HANDLER
+app.use((req, res, next) => {
+  const error = new CustomError("Route Not Found", 404);
+  next(error);
+});
+
+//CENTRALIZED ERROR HANDLER
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
