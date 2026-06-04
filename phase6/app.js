@@ -42,13 +42,13 @@ app.get(/^\/delete(?:\.html)?$/, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "delete.html"));
 });
 
-//404 HANDLER
+//404 HANDLER(MW runs for every req, so it can find its a 404)
 app.use((req, res, next) => {
   const error = new CustomError("Route Not Found", 404);
   next(error);
 });
 
-//CENTRALIZED ERROR HANDLER
+//CENTRALIZED ERROR HANDLER(MW runs for every req, so it can find other errors)
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
